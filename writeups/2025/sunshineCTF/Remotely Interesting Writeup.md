@@ -174,7 +174,7 @@ Scrolling through the outputs manually, the striped garbage gave way to a clear 
 ![Full Dialog screenshot](../../../assets/2025/sunshineCTF/images/fulldialog.png)
 
 And there it was:
-**`FLAG{REDACTED}`**
+**`sun{r3m0t3_pwn4g3_QQ}`**
 
 ---
 
@@ -186,7 +186,3 @@ And there it was:
 * The fastest workflow: coarse sweep → anchor → focused repack → manual scroll.
 
 ---
-
-**Flag:** `REDACTED`
-
-Would you like me to polish this further into a *LinkedIn post format* (with intro hook, bullet highlights, and a “lessons learned” ending), or keep it in CTF writeup style for the hacker audience?
