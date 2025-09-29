@@ -70,7 +70,7 @@ for offset in range(0, L, step):
 print("initial sweep done; check raw_candidates/")
 
 ```
-
+![Torn screenshot](../../../assets/2025/sunshineCTF/images/tornimage.png)
 ![Dialog screenshot](../../../assets/2025/sunshineCTF/images/topdialog.png)
 
 ---
