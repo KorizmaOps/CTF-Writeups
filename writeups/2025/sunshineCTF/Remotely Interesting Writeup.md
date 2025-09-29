@@ -1,4 +1,4 @@
-# CTF Forensics Writeup — *Recover what was last on the screen*
+# CTF Forensics Writeup *Recover what was last on the screen*
 
 **Challenge prompt**
 
