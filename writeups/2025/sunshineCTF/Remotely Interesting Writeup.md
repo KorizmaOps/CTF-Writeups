@@ -8,7 +8,7 @@
 ![Chall screenshot](../../../assets/2025/sunshineCTF/images/remotely_interesting_chall.png)
 
 
-The challenge gave a google drive link to a file: dwm.exe.dmp
+The challenge gave a google drive link to a file: `dwm.exe.dmp`
 
 ---
 
