@@ -6,7 +6,10 @@
 > A scientist was RDP’d into a Windows workstation when a strange window flashed. The session locked out, but the EDR captured a `dwm.exe.dmp`. What was shown?
 
 ![Chall screenshot](../../../assets/2025/sunshineCTF/images/remotely_interesting_chall.png)
+
+
 The challenge gave a google drive link to a file: dwm.exe.dmp
+
 ---
 
 ## My approach & thought process
