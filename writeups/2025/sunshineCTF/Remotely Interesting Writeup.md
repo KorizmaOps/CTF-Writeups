@@ -53,7 +53,7 @@ for off in range(0,L,step):
       try_slice(off,w,h,fmt,idx); idx+=1
 ```
 
-![Dialog screenshot](../../assets/2025/sunshineCTF/images/topdialog.png)
+![Dialog screenshot](../../../assets/2025/sunshineCTF/images/topdialog.png)
 
 ---
 
@@ -110,7 +110,7 @@ done
 
 Scrolling through the outputs manually, the striped garbage gave way to a clear screenshot. The ransom dialog was fully visible in `png_1024x768_scan/cand_off17158144_p4096.png`.
 
-![Full Dialog screenshot](../../assets/2025/sunshineCTF/images/fulldialog.png)
+![Full Dialog screenshot](../../../assets/2025/sunshineCTF/images/fulldialog.png)
 
 And there it was:
 **`FLAG{REDACTED}`**
