@@ -71,7 +71,7 @@ print("initial sweep done; check raw_candidates/")
 
 ```
 ![Torn screenshot](../../../assets/2025/sunshineCTF/images/tornimage.png)
-![Dialog screenshot](../../../assets/2025/sunshineCTF/images/topdialog.png)
+
 
 ---
 
@@ -163,9 +163,13 @@ ls -S png_1024x768_scan/*.png | head -20
 
 ---
 
+
+![Dialog screenshot](../../../assets/2025/sunshineCTF/images/topdialog.png)
+
 ## Step 3 — Scroll until it appears
 
 Scrolling through the outputs manually, the striped garbage gave way to a clear screenshot. The ransom dialog was fully visible in `png_1024x768_scan/cand_off17158144_p4096.png`.
+
 
 ![Full Dialog screenshot](../../../assets/2025/sunshineCTF/images/fulldialog.png)
 
