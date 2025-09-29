@@ -5,6 +5,8 @@
 > *Recover what was last on the screen.*
 > A scientist was RDP’d into a Windows workstation when a strange window flashed. The session locked out, but the EDR captured a `dwm.exe.dmp`. What was shown?
 
+![Full Dialog screenshot](../../assets/2025/sunshineCTF/images/remotely_interesting_chall.png)
+
 ---
 
 ## My approach & thought process
