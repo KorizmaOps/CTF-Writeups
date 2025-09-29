@@ -26,31 +26,49 @@ So the plan was:
 I wrote a quick script to scan the dump at 16 MB intervals, trying common resolutions (1024×768, 1366×768, 1920×1080, etc.) and both RGBA/BGRA channel orders. The output was mostly junk, but one slice contained the **top of a dialog box**, heavily torn. That was the proof I needed: a screenshot existed and I had a ballpark offset.
 
 ```python
-# initial_sweep.py
+#!/usr/bin/env python3
+# initial_sweep.py — coarse raw-slice sweep for screenshot fingerprints
+
 import os, subprocess
 src = "dwm.exe.dmp"
-outdir = "raw_candidates"; os.makedirs(outdir, exist_ok=True)
+outdir = "raw_candidates"
+os.makedirs(outdir, exist_ok=True)
 
-sizes = [(1366,768),(1024,768),(1920,1080)]
-step = 16 * 1024 * 1024
+# pick common desktop resolutions to test
+sizes = [(1366,768),(1024,768),(1920,1080),(1600,900)]
+step = 16 * 1024 * 1024  # 16 MiB jumps to probe the file quickly
 L = os.path.getsize(src)
 idx = 0
 
-def try_slice(offset,w,h,fmt,idx):
-    size = w*h*4
-    with open(src,"rb") as f: f.seek(offset); buf=f.read(size)
-    if len(buf)!=size: return
-    raw=f"{outdir}/slice_{idx:05d}_{w}x{h}_{fmt}_off{offset}.raw"
-    png=raw.replace(".raw",".png"); open(raw,"wb").write(buf)
+def try_slice(offset, w, h, fmt, idx):
+    size = w * h * 4
+    with open(src, "rb") as f:
+        f.seek(offset)
+        buf = f.read(size)
+    if len(buf) != size:
+        return False
+    raw = f"{outdir}/slice_{idx:05d}_{w}x{h}_{fmt}_off{offset}.raw"
+    png = raw.replace(".raw", ".png")
+    open(raw, "wb").write(buf)
     try:
-        subprocess.run(["convert","-size",f"{w}x{h}","-depth","8",f"{fmt}:{raw}",png],check=True)
-    except: pass
-    finally: os.remove(raw)
+        subprocess.run(["convert", "-size", f"{w}x{h}", "-depth", "8", f"{fmt}:{raw}", png],
+                       check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        os.remove(raw)
+        print("made", png)
+        return True
+    except Exception:
+        try: os.remove(raw)
+        except: pass
+        return False
 
-for off in range(0,L,step):
-  for (w,h) in sizes:
-    for fmt in ("rgba","bgra"):
-      try_slice(off,w,h,fmt,idx); idx+=1
+for offset in range(0, L, step):
+    for (w,h) in sizes:
+        for fmt in ("bgra","rgba"):
+            try_slice(offset, w, h, fmt, idx)
+            idx += 1
+
+print("initial sweep done; check raw_candidates/")
+
 ```
 
 ![Dialog screenshot](../../../assets/2025/sunshineCTF/images/topdialog.png)
@@ -69,28 +87,64 @@ I wrote a repacker that:
 * Saves as PNG.
 
 ```python
-# repack_surface.py
+#!/usr/bin/env python3
+# repack_surface.py — read pitch*height at offset, copy width*4 from each row,
+# BGRA -> RGBA, force alpha 255, save PNG.
+
 import sys
 from PIL import Image
-src,offset,W,H,pitch,out=sys.argv[1],int(sys.argv[2]),int(sys.argv[3]),int(sys.argv[4]),int(sys.argv[5]),sys.argv[6]
 
-need=pitch*H
-with open(src,"rb") as f: f.seek(offset); buf=f.read(need)
-rowbytes=W*4; tight=bytearray(W*H*4)
-for y in range(H):
-    row=buf[y*pitch:y*pitch+rowbytes]
-    for x in range(0,rowbytes,4):
-        b,g,r,a=row[x:x+4]; i=y*rowbytes+x
-        tight[i:i+4]=bytes([r,g,b,255])
-Image.frombytes("RGBA",(W,H),bytes(tight)).save(out)
+def repack_and_save(src, offset, W, H, pitch, out):
+    need = pitch * H
+    with open(src, "rb") as f:
+        f.seek(offset)
+        buf = f.read(need)
+    if len(buf) != need:
+        print("FAIL: short read")
+        return False
+
+    rowbytes = W * 4
+    tight = bytearray(W * H * 4)
+    for y in range(H):
+        row = buf[y * pitch : y * pitch + rowbytes]
+        if len(row) < rowbytes:
+            print("FAIL: short row")
+            return False
+        # BGRA -> RGBA, set alpha = 255
+        for x in range(0, rowbytes, 4):
+            b = row[x+0]
+            g = row[x+1]
+            r = row[x+2]
+            idx = (y * rowbytes) + x
+            tight[idx + 0] = r
+            tight[idx + 1] = g
+            tight[idx + 2] = b
+            tight[idx + 3] = 255
+
+    Image.frombytes("RGBA", (W, H), bytes(tight)).save(out, optimize=True)
+    return True
+
+if __name__ == "__main__":
+    if len(sys.argv) != 7:
+        print("usage: repack_surface.py dump offset width height pitch out.png")
+        sys.exit(1)
+    src = sys.argv[1]
+    offset = int(sys.argv[2])
+    W = int(sys.argv[3])
+    H = int(sys.argv[4])
+    pitch = int(sys.argv[5])
+    out = sys.argv[6]
+    ok = repack_and_save(src, offset, W, H, pitch, out)
+    print("OK" if ok else "FAIL")
+
 ```
 
 Focused sweep loop:
 
 ```bash
-BASE=16777216
-SPAN=524288
-STEP=4096
+BASE=16777216         # the rough anchor from the coarse slice
+SPAN=524288           # +/- 512 KiB
+STEP=4096             # 4 KiB step
 W=1024; H=768
 PITCHES=(3840 4096 4352)
 
@@ -98,10 +152,13 @@ mkdir -p png_1024x768_scan
 for off in $(seq $((BASE - SPAN)) $STEP $((BASE + SPAN))); do
   for p in "${PITCHES[@]}"; do
     out=png_1024x768_scan/cand_off${off}_p${p}.png
-    python3 repack_surface.py dwm.exe.dmp $off $W $H $p $out || true
+    python3 repack_surface.py dwm.exe.dmp $off $W $H $p $out >/dev/null 2>&1 || true
     [ -f "$out" ] && [ $(stat -c%s "$out") -lt 20000 ] && rm -f "$out"
   done
 done
+
+ls -S png_1024x768_scan/*.png | head -20
+
 ```
 
 ---
