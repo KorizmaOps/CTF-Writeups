@@ -40,7 +40,6 @@ While these writeups reflect my individual work and learning, they were often pa
 | justCTF 2025                              | 152 / 1000+ | 169.000    | 3.878         |
 
 **Overall Team Rank CTFTIME (2025):** 119 / 15000+ teams worldwide
-**Total Points:** 285,473
 
 ---
 
