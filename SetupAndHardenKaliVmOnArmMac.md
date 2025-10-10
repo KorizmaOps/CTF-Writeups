@@ -296,13 +296,13 @@ This snapshot is your reset point before malware analysis or risky challenges.
 Your VM resides at:
 
 ```
-~/Documents/Virtual Machines.localized/<VM Name>.vmwarevm
+~/Virtual Machines/<name of kali vm here>
 ```
 
 Copy this folder to an external drive:
 
 ```bash
-cp -r ~/Documents/Virtual\ Machines.localized/<VM Name>.vmwarevm /Volumes/YourBackupDrive/
+cp -r ~/Virtual Machines/<name of kali vm here> /Volumes/YourBackupDrive/
 ```
 
 ✅ This allows instant restore by importing back into VMware Fusion.
