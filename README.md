@@ -26,14 +26,14 @@ While these writeups reflect my individual work and learning, they were often pa
 | Event                                     | Placement   | CTF Points | Rating Points |
 | ----------------------------------------- | ----------- | ---------- | ------------- |
 | FortID CTF 2025                           | 1 / 550+    | 8546.000   | 60.000        |
-| SunshineCTF 2025                          | 13 / 5890+  | 6341.000   | 45.801        |
+| SunshineCTF 2025                          | 13 / 1190+  | 6341.000   | 45.801        |
 | Securinets CTF Quals 2025                 | 19 / 553    | 5004.000   | 43.555        |
 | CrewCTF 2025                              | 22 / 2000+  | 1958.000   | 11.521        |
 | Nullcon Berlin HackIM 2025                | 21 / 1400+  | 3002.000   | 13.189        |
 | WHY2025 CTF                               | 20 / 1000+  | 3900.000   | 0.000         |
 | Lexington Informatics Tournament CTF 2025 | 15 / 900+   | 5354.000   | 57.083        |
 | BrunnerCTF 2025                           | 30 / 1100+  | 7219.000   | 8.436         |
-| SekaiCTF 2025                             | 55 / 5890+  | 1009.000   | 10.507        |
+| SekaiCTF 2025                             | 55 / 2010+  | 1009.000   | 10.507        |
 | corCTF 2025                               | 56 / 1200+  | 1353.000   | 16.388        |
 | TFC CTF 2025                              | 80 / 1000+  | 300.000    | 3.757         |
 | idekCTF 2025                              | 27 / 500+   | 2340.000   | 15.434        |
